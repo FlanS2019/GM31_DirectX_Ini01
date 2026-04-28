@@ -40,6 +40,12 @@ void Polygon2D::Init()
 	//シェーダーの作成
 	Renderer::CreateVertexShader(&m_VertexShader, &m_VertexLayout, "shader\\unlitTextureVS.cso");
 	Renderer::CreatePixelShader(&m_PixelShader, "shader\\unlitTexturePS.cso");
+
+	//テクスチャの作成
+	TexMetadata metadata{};
+	ScratchImage image{};
+	LoadFromWICFile(L"texture\\sura.jpg", WIC_FLAGS_NONE, &metadata, image);
+	CreateShaderResourceView(Renderer::GetDevice(), image.GetImages(), image.GetImageCount(), metadata, &m_Texture);
 }
 
 void Polygon2D::Uninit()
@@ -48,6 +54,7 @@ void Polygon2D::Uninit()
 	m_VertexLayout->Release();
 	m_VertexShader->Release();
 	m_PixelShader->Release();
+	m_Texture->Release();
 }
 
 void Polygon2D::Update()
@@ -61,6 +68,9 @@ void Polygon2D::Draw()
 	Renderer::GetDeviceContext()->VSSetShader(m_VertexShader, NULL, 0);
 	Renderer::GetDeviceContext()->PSSetShader(m_PixelShader, NULL, 0);
 
+	// テクスチャをピクセルシェーダへバインド (t0)
+	Renderer::GetDeviceContext()->PSSetShaderResources(0, 1, &m_Texture);
+
 	Renderer::SetWorldViewProjection2D();
 	XMMATRIX world ,scale, rot, trans;
 	scale = XMMatrixScaling(1.0f, 1.0f, 1.0f);//拡大率
@@ -72,7 +82,7 @@ void Polygon2D::Draw()
 
 	MATERIAL material{};
 	material.Diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-	material.TextureEnable = FALSE;
+	material.TextureEnable = TRUE;
 	Renderer::SetMaterial(material);
 
 	UINT stride = sizeof(VERTEX_3D);

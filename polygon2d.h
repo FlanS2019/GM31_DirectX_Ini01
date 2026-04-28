@@ -11,6 +11,8 @@ private:
 	ID3D11VertexShader* m_VertexShader;
 	ID3D11PixelShader* m_PixelShader;
 
+	ID3D11ShaderResourceView* m_Texture;
+
 public:
 	void Init();
 	void Uninit();

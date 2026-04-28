@@ -15,6 +15,13 @@
 #include <DirectXMath.h>
 using namespace DirectX;
 
+#include "DirectXTex.h"
+#if _DEBUG
+#pragma comment (lib, "DirectXTex_Debug.lib")
+#else
+#pragma comment (lib, "DirectXTex.lib")
+#endif
+
 #pragma comment (lib, "winmm.lib")
 
 
