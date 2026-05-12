@@ -6,9 +6,9 @@ class Camera : public GameObject
 private:
 	Vector3 m_Target{ 0, 0, 0 };
 public:
-	void Init();
-	void Uninit();
-	void Update();
-	void Draw();
+	void Init()override;
+	void Uninit()override;
+	void Update()override;
+	void Draw()override;
 };
 

@@ -15,8 +15,8 @@ private:
 	ID3D11ShaderResourceView* m_Texture;
 
 public:
-	void Init();
-	void Uninit();
-	void Update();
-	void Draw();
+	void Init()override;
+	void Uninit()override;
+	void Update()override;
+	void Draw()override;
 };

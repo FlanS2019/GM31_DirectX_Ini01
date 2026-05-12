@@ -5,25 +5,33 @@
 #include "field.h"
 #include "camera.h"
 
-GameObject* g_GameObject[3];
+std::list<GameObject*> Manager::g_GameObjectList;//リストを使用する場合は、配列ではなくリストを宣言する必要があります。
+
+//GameObject* g_GameObject[3];
 
 void Manager::Init()
 {
 	Renderer::Init();
-	g_GameObject[0] = new Camera();
-	g_GameObject[0]->Init();
 
-	g_GameObject[1] = new Field();
-	g_GameObject[1]->Init();	
+	GameObject* gameObject;
 
-	g_GameObject[2] = new Polygon2D();
-	g_GameObject[2]->Init();
+	gameObject = new Camera();
+	gameObject->Init();
+	g_GameObjectList.push_back(gameObject);
+
+	gameObject = new Field();
+	gameObject->Init();
+	g_GameObjectList.push_back(gameObject);
+
+	gameObject = new Polygon2D();
+	gameObject->Init();
+	g_GameObjectList.push_back(gameObject);
 
 }
 
 void Manager::Uninit()
 {
-	for(GameObject* gameObject : g_GameObject)
+	for(GameObject* gameObject : g_GameObjectList)
 	{
 		gameObject->Uninit();
 		delete gameObject;
@@ -33,7 +41,7 @@ void Manager::Uninit()
 
 void Manager::Update()
 {
-	for (GameObject* gameObject : g_GameObject)
+	for (GameObject* gameObject : g_GameObjectList)
 	{
 		gameObject->Update();
 	}
@@ -43,7 +51,7 @@ void Manager::Draw()
 {
 	Renderer::Begin();
 
-	for (GameObject* gameObject : g_GameObject)
+	for (GameObject* gameObject : g_GameObjectList)
 	{
 		gameObject->Draw();
 	}
