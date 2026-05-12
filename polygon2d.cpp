@@ -5,6 +5,13 @@
 
 void Polygon2D::Init()
 {
+	//// メンバ初期化（Uninit での安全な Release のため）
+	//m_VertexBuffer = nullptr;
+	//m_VertexLayout = nullptr;
+	//m_VertexShader = nullptr;
+	//m_PixelShader = nullptr;
+	//m_Texture = nullptr;
+
 	VERTEX_3D vertex[4];
 
 	vertex[0].Position = XMFLOAT3(0.0f, 0.0f, 0.0f);
@@ -37,9 +44,10 @@ void Polygon2D::Init()
 	D3D11_SUBRESOURCE_DATA sd{};
 	sd.pSysMem = vertex;
 	Renderer::GetDevice()->CreateBuffer(&bd, &sd, &m_VertexBuffer);
+
 	//シェーダーの作成
-	Renderer::CreateVertexShader(&m_VertexShader, &m_VertexLayout, "shader\\unlitTextureVS.cso");
-	Renderer::CreatePixelShader(&m_PixelShader, "shader\\unlitTexturePS.cso");
+	Renderer::CreateVertexShader(&m_VertexShader, &m_VertexLayout, "shaderunlitTextureVS.cso");
+	Renderer::CreatePixelShader(&m_PixelShader, "shaderunlitTexturePS.cso");
 
 	//テクスチャの作成
 	TexMetadata metadata{};

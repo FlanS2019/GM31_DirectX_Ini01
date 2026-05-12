@@ -1,8 +1,9 @@
 #pragma once
 #include <d3d11.h>
+#include "vector3.h"
 #include "gameObject.h"
 
-class Polygon2D : public GameObject
+class Field : public GameObject
 {
 private:
 
@@ -15,6 +16,7 @@ private:
 	ID3D11ShaderResourceView* m_Texture;
 
 public:
+
 	void Init();
 	void Uninit();
 	void Update();

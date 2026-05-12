@@ -8,6 +8,8 @@
 #include <assert.h>
 #include <functional>
 
+#include <list>
+
 #include <d3d11.h>
 #pragma comment (lib, "d3d11.lib")
 
@@ -21,6 +23,8 @@ using namespace DirectX;
 #else
 #pragma comment (lib, "DirectXTex.lib")
 #endif
+
+#include "vector3.h"
 
 #pragma comment (lib, "winmm.lib")
 

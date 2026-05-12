@@ -9,8 +9,6 @@ struct VERTEX_3D
 	XMFLOAT2 TexCoord;
 };
 
-
-
 struct MATERIAL
 {
 	XMFLOAT4	Ambient;
