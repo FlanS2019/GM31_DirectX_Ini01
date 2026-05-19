@@ -125,14 +125,23 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="camera.cpp" />
+    <ClCompile Include="enemy.cpp" />
     <ClCompile Include="field.cpp" />
     <ClCompile Include="gameObject.cpp" />
+    <ClCompile Include="Input.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="manager.cpp" />
     <ClInclude Include="camera.h" />
+    <ClInclude Include="component.h" />
+    <ClInclude Include="enemy.h" />
     <ClInclude Include="field.h" />
     <ClInclude Include="gameObject.h" />
+    <ClInclude Include="Input.h" />
+    <ClInclude Include="modelRenderer.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="polygon2d.h" />
+    <ClCompile Include="modelRenderer.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="polygon2d.cpp" />
     <ClCompile Include="renderer.cpp" />
   </ItemGroup>

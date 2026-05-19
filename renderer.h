@@ -1,6 +1,5 @@
 #pragma once
 
-
 struct VERTEX_3D
 {
 	XMFLOAT3 Position;
