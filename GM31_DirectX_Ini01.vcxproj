@@ -132,6 +132,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="manager.cpp" />
     <ClInclude Include="camera.h" />
+    <ClInclude Include="CameraComponen.h" />
     <ClInclude Include="component.h" />
     <ClInclude Include="enemy.h" />
     <ClInclude Include="field.h" />
@@ -149,6 +150,7 @@
     <ClInclude Include="main.h" />
     <ClInclude Include="manager.h" />
     <ClInclude Include="renderer.h" />
+    <ClInclude Include="transform.h" />
     <ClInclude Include="vector3.h" />
   </ItemGroup>
   <ItemGroup>

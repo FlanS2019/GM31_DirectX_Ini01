@@ -41,11 +41,13 @@ void Manager::Uninit()
 
 void Manager::Update()
 {
+	// キー状態を先に更新してから各オブジェクトを更新する（Input の状態に依存する Update の正しい動作のため）
+	Input::Update();
+
 	for (GameObject* gameObject : g_GameObject)
 	{
 		gameObject->Update();
 	}
-	Input::Update();
 }
 
 void Manager::Draw()

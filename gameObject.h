@@ -8,18 +8,24 @@
 
 class GameObject
 {
-protected: // 継承先でアクセスできるようにする
+protected: // サブクラスが扱えるように protected
 	Vector3 m_Position{ 0,0,0 };
 	Vector3 m_Rotation{ 0,0,0 };
 	Vector3 m_Scale{ 1,1,1 };
 
-	// 各 GameObject ごとに持つコンポーネントのリスト（static ではなくインスタンスメンバ）
 	std::list<Component*> m_Components;
 
 public:
 	void SetPosition(const Vector3& position) { m_Position = position; }
+	Vector3 GetPosition() const { return m_Position; }
 
-	// 派生クラスでオーバーライド可能にする
+	void SetRotation(const Vector3& rotation) { m_Rotation = rotation; }
+	Vector3 GetRotation() const { return m_Rotation; }
+
+	void SetScale(const Vector3& scale) { m_Scale = scale; }
+	Vector3 GetScale() const { return m_Scale; }
+
+	// ライフサイクル
 	virtual void Init(){}
 
 	virtual void Uninit()
@@ -57,7 +63,6 @@ public:
 		static_assert(std::is_base_of<Component, T>::value, "T must inherit from Component");
 		T* component = new T(this);
 		m_Components.push_back(component);
-		// 追加直後に初期化する
 		component->Init();
 		return component;
 	}

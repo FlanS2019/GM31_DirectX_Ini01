@@ -5,7 +5,7 @@
 
 void Camera::Init()
 {
-	m_Position = { 0, 5, -10 };
+	m_Position = { 0, 35, -30 };
 }
 
 void Camera::Uninit()
