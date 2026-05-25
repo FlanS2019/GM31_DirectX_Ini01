@@ -33,16 +33,22 @@ void Player::Update()
 	const float gravity = 119.8f;   // 重力 (units/s^2)
 	const float jumpImpulse = 25.0f; // ジャンプ初速
 
+	// --- Sprint (Shift) ---
+	// Shiftキーでスプリントさせる: 倍率を変更することで調整可能
+	const float sprintMultiplier = Input::GetKeyPress(VK_SHIFT) ? 2.0f : 1.0f;
+	const float currentAccel = accel * sprintMultiplier;
+	const float currentMaxSpeed = maxSpeed * sprintMultiplier;
+
 	// --- X 軸（左右） ---
 	if (Input::GetKeyPress('D')) // 右
 	{
-		m_Velocity.x += accel * dt;
-		if (m_Velocity.x > maxSpeed) m_Velocity.x = maxSpeed;
+		m_Velocity.x += currentAccel * dt;
+		if (m_Velocity.x > currentMaxSpeed) m_Velocity.x = currentMaxSpeed;
 	}
 	else if (Input::GetKeyPress('A')) // 左
 	{
-		m_Velocity.x -= accel * dt;
-		if (m_Velocity.x < -maxSpeed) m_Velocity.x = -maxSpeed;
+		m_Velocity.x -= currentAccel * dt;
+		if (m_Velocity.x < -currentMaxSpeed) m_Velocity.x = -currentMaxSpeed;
 	}
 	else
 	{
@@ -62,13 +68,13 @@ void Player::Update()
 	// --- Z 軸（前後）: X 軸と同様の加速・摩擦を適用 ---
 	if (Input::GetKeyPress('W')) // 前 (負方向)
 	{
-		m_Velocity.z -= accel * dt;
-		if (m_Velocity.z < -maxSpeed) m_Velocity.z = -maxSpeed;
+		m_Velocity.z -= currentAccel * dt;
+		if (m_Velocity.z < -currentMaxSpeed) m_Velocity.z = -currentMaxSpeed;
 	}
 	else if (Input::GetKeyPress('S')) // 後 (正方向)
 	{
-		m_Velocity.z += accel * dt;
-		if (m_Velocity.z > maxSpeed) m_Velocity.z = maxSpeed;
+		m_Velocity.z += currentAccel * dt;
+		if (m_Velocity.z > currentMaxSpeed) m_Velocity.z = currentMaxSpeed;
 	}
 	else
 	{
