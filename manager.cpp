@@ -26,6 +26,7 @@ void Manager::Init()
 	AddGameObject<Player>();
 	AddGameObject<enemy>()->SetPosition({ -2.0f, 0.0f, 1.0f });
 	AddGameObject<Polygon2D>();
+
 }
 
 void Manager::Uninit()

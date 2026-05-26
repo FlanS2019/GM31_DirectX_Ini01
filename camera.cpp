@@ -2,10 +2,15 @@
 #include "camera.h"
 #include "renderer.h"
 #include "manager.h"
+#include "player.h"
+#include "Input.h"
 
 void Camera::Init()
 {
-	m_Position = { 0, 35, -30 };
+	m_Position = { 0, 5, -10 };
+	m_Yaw = 0.0f;    // 追加
+	m_Pitch = 0.3f;  // 追加
+	m_Distance = 8.0f; // 追加
 }
 
 void Camera::Uninit()
@@ -14,13 +19,28 @@ void Camera::Uninit()
 
 void Camera::Update()
 {
+	Player* player = Manager::GetGameObject<Player>();
+	if (player == nullptr) return;
+
+	Vector3 playerPos = player->GetPosition();
+	float playerYaw = player->GetRotation().y -10; // プレイヤーの向き
+
+	// プレイヤーの真後ろにカメラを置く
+	const float distance = 8.0f;//プレイヤーからカメラまでの距離
+	const float height = 4.0f;
+
+	m_Position.x = playerPos.x - sinf(playerYaw) * distance;
+	m_Position.y = playerPos.y + height;
+	m_Position.z = playerPos.z - cosf(playerYaw) * distance;
+
+	m_Target = playerPos;
 }
 
 void Camera::Draw()
 {
 	//projection行列の作成
 	XMMATRIX projection = XMMatrixPerspectiveFovLH
-	(1,(float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 1000.0f);
+	(1, (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 1000.0f);
 
 	Renderer::SetProjectionMatrix(projection);
 

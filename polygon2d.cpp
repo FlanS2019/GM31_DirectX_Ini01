@@ -52,7 +52,7 @@ void Polygon2D::Init()
 	//テクスチャの作成
 	TexMetadata metadata{};
 	ScratchImage image{};
-	LoadFromWICFile(L"texture\\muramatu.png", WIC_FLAGS_NONE, &metadata, image);
+	LoadFromWICFile(L"texture\\jimen.jpg", WIC_FLAGS_NONE, &metadata, image);
 	CreateShaderResourceView(Renderer::GetDevice(), image.GetImages(), image.GetImageCount(), metadata, &m_Texture);
 }
 

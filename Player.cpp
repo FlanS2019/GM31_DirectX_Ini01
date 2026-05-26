@@ -3,6 +3,8 @@
 #include "renderer.h"
 #include "modelRenderer.h"
 #include "Input.h"
+#include "camera.h"
+#include "manager.h"
 
 void Player::Init()
 {
@@ -25,12 +27,11 @@ void Player::Update()
 {
 	// フレーム固定の簡易 dt（実際は実時間差を使うのが望ましい）
 	float dt = 1.0f / 60.0f;
-
 	// パラメータ
-	const float accel = 10.0f;    // 加速度 (units/s^2)
+	const float accel = 5.0f;    // 加速度 (units/s^2)
 	const float maxSpeed = 5.0f;  // 最大速度 (units/s)
-	const float friction = 15.0f; // 減速 (units/s^2)
-	const float gravity = 119.8f;   // 重力 (units/s^2)
+	const float friction = 150.0f; // 減速 (units/s^2)
+	const float gravity = 20.0f;   // 重力 (units/s^2)
 	const float jumpImpulse = 25.0f; // ジャンプ初速
 
 	// --- Sprint (Shift) ---
@@ -39,57 +40,23 @@ void Player::Update()
 	const float currentAccel = accel * sprintMultiplier;
 	const float currentMaxSpeed = maxSpeed * sprintMultiplier;
 
-	// --- X 軸（左右） ---
-	if (Input::GetKeyPress('D')) // 右
-	{
-		m_Velocity.x += currentAccel * dt;
-		if (m_Velocity.x > currentMaxSpeed) m_Velocity.x = currentMaxSpeed;
-	}
-	else if (Input::GetKeyPress('A')) // 左
-	{
-		m_Velocity.x -= currentAccel * dt;
-		if (m_Velocity.x < -currentMaxSpeed) m_Velocity.x = -currentMaxSpeed;
-	}
-	else
-	{
-		// 摩擦で速度を 0 に近づける
-		if (m_Velocity.x > 0.0f)
-		{
-			m_Velocity.x -= friction * dt;
-			if (m_Velocity.x < 0.0f) m_Velocity.x = 0.0f;
-		}
-		else if (m_Velocity.x < 0.0f)
-		{
-			m_Velocity.x += friction * dt;
-			if (m_Velocity.x > 0.0f) m_Velocity.x = 0.0f;
-		}
-	}
+	Vector3 forward = GetForward();
+	Vector3 right = GetRight();
+	// 
+	//// この2行に置き換え
+	//Camera* camera = Manager::GetGameObject<Camera>();
+	//float yaw = camera->GetYaw();
+	//Vector3 forward = { sinf(yaw), 0.0f, cosf(yaw) };
+	//Vector3 right = { cosf(yaw), 0.0f, -sinf(yaw) };
 
-	// --- Z 軸（前後）: X 軸と同様の加速・摩擦を適用 ---
-	if (Input::GetKeyPress('W')) // 前 (負方向)
-	{
-		m_Velocity.z -= currentAccel * dt;
-		if (m_Velocity.z < -currentMaxSpeed) m_Velocity.z = -currentMaxSpeed;
-	}
-	else if (Input::GetKeyPress('S')) // 後 (正方向)
-	{
-		m_Velocity.z += currentAccel * dt;
-		if (m_Velocity.z > currentMaxSpeed) m_Velocity.z = currentMaxSpeed;
-	}
-	else
-	{
-		// 摩擦で速度を 0 に近づける
-		if (m_Velocity.z > 0.0f)
-		{
-			m_Velocity.z -= friction * dt;
-			if (m_Velocity.z < 0.0f) m_Velocity.z = 0.0f;
-		}
-		else if (m_Velocity.z < 0.0f)
-		{
-			m_Velocity.z += friction * dt;
-			if (m_Velocity.z > 0.0f) m_Velocity.z = 0.0f;
-		}
-	}
+	if(Input::GetKeyPress('D'))
+		m_Velocity += right * 50.0f * dt;
+	if(Input::GetKeyPress('A'))
+		m_Velocity -= right * 50.0f * dt;
+	if(Input::GetKeyPress('W'))
+		m_Velocity -= forward * 50.0f * dt;
+	if(Input::GetKeyPress('S'))
+		m_Velocity += forward * 50.0f * dt;
 
 	// 地面判定（小さな許容誤差を使用）
 	const float groundEpsilon = 0.001f;
@@ -105,6 +72,15 @@ void Player::Update()
 		{
 			m_Velocity.y = jumpImpulse;
 		}
+	}
+	//回転
+	if (Input::GetKeyPress('Q')) // 左回転
+	{
+		m_Rotation.y -= 2.0f * dt; // 回転速度は適宜調整
+	}
+	else if (Input::GetKeyPress('E')) // 右回転
+	{
+		m_Rotation.y += 2.0f * dt;
 	}
 
 	// 重力を適用
@@ -131,7 +107,7 @@ void Player::Draw()
 
 	XMMATRIX world, scale, rot, trans;
 	scale = XMMatrixScaling(m_Scale.x, m_Scale.y, m_Scale.z);//拡大率
-	rot = XMMatrixRotationRollPitchYaw(m_Rotation.x, m_Rotation.y, m_Rotation.z);//
+	rot = XMMatrixRotationRollPitchYaw(m_Rotation.x, m_Rotation.y, m_Rotation.z);//回転量
 	trans = XMMatrixTranslation(m_Position.x, m_Position.y, m_Position.z);//平行移動量
 	world = scale * rot * trans;
 

@@ -5,10 +5,16 @@ class Camera : public GameObject
 {
 private:
 	Vector3 m_Target{ 0, 0, 0 };
+	// ’Ç‰Á
+	float m_Yaw = 0.0f;
+	float m_Pitch = 0.3f;
+	float m_Distance = 8.0f;
+
 public:
 	void Init()override;
 	void Uninit()override;
 	void Update()override;
 	void Draw()override;
+    float GetYaw() const { return m_Yaw; }
 };
 

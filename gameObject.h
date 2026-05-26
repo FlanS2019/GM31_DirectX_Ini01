@@ -4,7 +4,9 @@
 #include <d3d11.h>
 #include <list>
 #include <type_traits>
+#include <DirectXMath.h>
 
+using namespace DirectX;
 
 class GameObject
 {
@@ -17,7 +19,7 @@ protected: // サブクラスが扱えるように protected
 
 public:
 	void SetPosition(const Vector3& position) { m_Position = position; }
-	Vector3 GetPosition() const { return m_Position; }
+	Vector3 GetPosition() { return m_Position; }
 
 	void SetRotation(const Vector3& rotation) { m_Rotation = rotation; }
 	Vector3 GetRotation() const { return m_Rotation; }
@@ -66,4 +68,24 @@ public:
 		component->Init();
 		return component;
 	}
+
+	Vector3 GetForward()
+	{
+		// rot をローカル変数として定義
+		XMMATRIX rot = XMMatrixRotationRollPitchYaw(m_Rotation.x, m_Rotation.y, m_Rotation.z); // 回転量
+		// XMVECTOR から Vector3 へ変換
+		Vector3 forward;
+		XMStoreFloat3((XMFLOAT3*)&forward, rot.r[2]); // rot の前方ベクトルは r[2] に格納されている 
+		return forward;
+	}
+	Vector3 GetRight()
+	{
+		// rot をローカル変数として定義
+		XMMATRIX rot = XMMatrixRotationRollPitchYaw(m_Rotation.x, m_Rotation.y, m_Rotation.z); // 回転量
+		// XMVECTOR から Vector3 へ変換
+		Vector3 forward;
+		XMStoreFloat3((XMFLOAT3*)&forward, rot.r[0]); // rot の前方ベクトルは r[2] に格納されている 
+		return forward;
+	}
+
 };

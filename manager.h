@@ -18,9 +18,20 @@ public:
 	static T* AddGameObject()
 	{
 		// ¶¬‚Í”h¶Œ^ƒ|ƒCƒ“ƒ^‚Ås‚¢AƒŠƒXƒg‚É‚ÍŠî’êƒ|ƒCƒ“ƒ^‚ÅŠi”[‚µ‚Ä‚©‚ç”h¶Œ^ƒ|ƒCƒ“ƒ^‚ð•Ô‚·
-		T* obj = new T();
-		obj->Init();
-		g_GameObject.push_back(static_cast<GameObject*>(obj));
-		return obj;
+		T* gameObject = new T();
+		gameObject->Init();
+		g_GameObject.push_back(gameObject);
+		return gameObject;
+	}
+	template<typename T>
+	static T* GetGameObject()
+	{
+		for (GameObject* gameObject : g_GameObject)
+		{
+			T* find = dynamic_cast<T*>(gameObject);
+			if (find != nullptr) 
+			return find;
+		}
+		return nullptr;
 	}
 };

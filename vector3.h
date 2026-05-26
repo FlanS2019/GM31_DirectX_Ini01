@@ -8,7 +8,7 @@ class Vector3
 public:
 	float x, y, z;
 
-	Vector3() {}
+	Vector3() : x(0.0f), y(0.0f), z(0.0f) {}
 	Vector3(const Vector3& a) : x(a.x), y(a.y), z(a.z) {}
 	Vector3(float nx, float ny, float nz) : x(nx), y(ny), z(nz) {}
 
@@ -48,23 +48,27 @@ public:
 	{
 		return Vector3(x - a.x, y - a.y, z - a.z);
 	}
-	Vector3 operator*(float a)
+	// ここを修正（元の値を変えないように）
+	Vector3 operator*(float a) const  // constを追加
+	{
+		return Vector3(x * a, y * a, z * a);  // 中身を修正
+	}
+	Vector3 operator/(float a) const  // constを追加
 	{
 		float oneOverA = 1.0f / a;
-		x *= oneOverA;
-		y *= oneOverA;
-		z *= oneOverA;
-		return *this;
+		return Vector3(x * oneOverA, y * oneOverA, z * oneOverA);  // 中身を修正
 	}
-	Vector3 operator/(float a)
+	// ここを追加（operator/ の直後あたり）
+	Vector3& operator+=(const Vector3& a)
 	{
-		float oneOverA = 1.0f / a;
-		x *= oneOverA;
-		y *= oneOverA;
-		z *= oneOverA;
+		x += a.x; y += a.y; z += a.z;
 		return *this;
 	}
-
+	Vector3& operator-=(const Vector3& a)
+	{
+		x -= a.x; y -= a.y; z -= a.z;
+		return *this;
+	}
 	//正規化
 	void normalize()
 	{
@@ -78,5 +82,3 @@ public:
 		}
 	}
 };
-
-
