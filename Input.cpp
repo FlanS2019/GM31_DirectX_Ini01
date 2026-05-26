@@ -29,14 +29,14 @@ void Input::Update()
     m_MouseDeltaX = (float)(curPos.x - prevPos.x);
     m_MouseDeltaY = (float)(curPos.y - prevPos.y);
 
-    // マウスをウィンドウ中央に固定
-    HWND hwnd = GetActiveWindow();
-    RECT rect;
-    GetClientRect(hwnd, &rect);
-    POINT center = { (rect.right - rect.left) / 2, (rect.bottom - rect.top) / 2 };
-    ClientToScreen(hwnd, &center);
-    SetCursorPos(center.x, center.y);
-    prevPos = center;
+    //// マウスをウィンドウ中央に固定
+    //HWND hwnd = GetActiveWindow();
+    //RECT rect;
+    //GetClientRect(hwnd, &rect);
+    //POINT center = { (rect.right - rect.left) / 2, (rect.bottom - rect.top) / 2 };
+    //ClientToScreen(hwnd, &center);
+    //SetCursorPos(center.x, center.y);
+    //prevPos = center;
 }
 bool Input::GetKeyPress(BYTE KeyCode)
 {

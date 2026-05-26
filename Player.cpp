@@ -5,6 +5,8 @@
 #include "Input.h"
 #include "camera.h"
 #include "manager.h"
+#include <cmath>
+#include <algorithm>
 
 void Player::Init()
 {
@@ -42,21 +44,13 @@ void Player::Update()
 
 	Vector3 forward = GetForward();
 	Vector3 right = GetRight();
-	// 
-	//// この2行に置き換え
-	//Camera* camera = Manager::GetGameObject<Camera>();
-	//float yaw = camera->GetYaw();
-	//Vector3 forward = { sinf(yaw), 0.0f, cosf(yaw) };
-	//Vector3 right = { cosf(yaw), 0.0f, -sinf(yaw) };
 
-	if(Input::GetKeyPress('D'))
-		m_Velocity += right * 50.0f * dt;
-	if(Input::GetKeyPress('A'))
-		m_Velocity -= right * 50.0f * dt;
-	if(Input::GetKeyPress('W'))
-		m_Velocity -= forward * 50.0f * dt;
-	if(Input::GetKeyPress('S'))
-		m_Velocity += forward * 50.0f * dt;
+	// 移動入力（加算）
+	bool moving = false;
+	if(Input::GetKeyPress('D')) { m_Velocity += right * 50.0f * dt; moving = true; }
+	if(Input::GetKeyPress('A')) { m_Velocity -= right * 50.0f * dt; moving = true; }
+	if(Input::GetKeyPress('W')) { m_Velocity -= forward * 50.0f * dt; moving = true; }
+	if(Input::GetKeyPress('S')) { m_Velocity += forward * 50.0f * dt; moving = true; }
 
 	// 地面判定（小さな許容誤差を使用）
 	const float groundEpsilon = 0.001f;
@@ -73,7 +67,8 @@ void Player::Update()
 			m_Velocity.y = jumpImpulse;
 		}
 	}
-	//回転
+
+	// 回転
 	if (Input::GetKeyPress('Q')) // 左回転
 	{
 		m_Rotation.y -= 2.0f * dt; // 回転速度は適宜調整
@@ -85,6 +80,46 @@ void Player::Update()
 
 	// 重力を適用
 	m_Velocity.y -= gravity * dt;
+
+	// --- 摩擦（地面上の水平速度にのみ適用） ---
+	// 水平速度ベクトル
+	Vector3 horizontalVel(m_Velocity.x, 0.0f, m_Velocity.z);
+	float hSpeed = std::sqrt(horizontalVel.x * horizontalVel.x + horizontalVel.z * horizontalVel.z);
+
+	if (grounded)
+	{
+		if (moving)
+		{
+			// 移動中は最大速度でクランプ
+			if (hSpeed > currentMaxSpeed && hSpeed > 0.0f)
+			{
+				float scale = currentMaxSpeed / hSpeed;
+				m_Velocity.x *= scale;
+				m_Velocity.z *= scale;
+			}
+		}
+		else
+		{
+			// 移動入力がない場合は摩擦で減速する（friction は units/s^2）
+			if (hSpeed > 0.0f)
+			{
+				float decel = friction * dt;
+				if (decel >= hSpeed)
+				{
+					// 十分に減速するので止める
+					m_Velocity.x = 0.0f;
+					m_Velocity.z = 0.0f;
+				}
+				else
+				{
+					// 方向を保ったまま速度を減らす
+					float inv = 1.0f / hSpeed;
+					m_Velocity.x -= m_Velocity.x * inv * decel;
+					m_Velocity.z -= m_Velocity.z * inv * decel;
+				}
+			}
+		}
+	}
 
 	// 速度を位置に反映（加速が見えるようにする重要なステップ）
 	m_Position.x += m_Velocity.x * dt;
