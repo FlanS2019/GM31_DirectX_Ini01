@@ -2,13 +2,10 @@
 #include "manager.h"
 #include <thread>
 
-
 const wchar_t* CLASS_NAME = L"AppClass";
 const wchar_t* WINDOW_NAME = L"DX11ÉQÅ[ÉÄ";
 
-
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-
 
 HWND g_Window;
 
@@ -19,8 +16,6 @@ HWND GetWindow()
 
 int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
-
-
 	WNDCLASSEXW wcex;
 	{
 		wcex.cbSize = sizeof(WNDCLASSEXW);
