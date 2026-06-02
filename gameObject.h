@@ -11,6 +11,8 @@ using namespace DirectX;
 class GameObject
 {
 protected: // サブクラスが扱えるように protected
+	bool m_Destroy = false;
+
 	Vector3 m_Position{ 0,0,0 };
 	Vector3 m_Rotation{ 0,0,0 };
 	Vector3 m_Scale{ 1,1,1 };
@@ -26,6 +28,8 @@ public:
 
 	void SetScale(const Vector3& scale) { m_Scale = scale; }
 	Vector3 GetScale() const { return m_Scale; }
+
+	void SetDestroy(bool destroy) { m_Destroy = true; }
 
 	// ライフサイクル
 	virtual void Init(){}
@@ -87,5 +91,15 @@ public:
 		XMStoreFloat3((XMFLOAT3*)&forward, rot.r[0]); // rot の前方ベクトルは r[2] に格納されている 
 		return forward;
 	}
-
+	bool Destroy()
+	{
+		if(m_Destroy)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
 };

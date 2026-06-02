@@ -5,12 +5,13 @@
 #include "Input.h"
 #include "camera.h"
 #include "manager.h"
+#include "bullet.h"
 #include <cmath>
 #include <algorithm>
 
 void Player::Init()
 {
-	m_Position = { -5, 0, 0 };
+	m_Position = { 5, 0, 0 };// 初期位置を設定
 
 	ModelRenderer* modelRenderer = AddComponent<ModelRenderer>();
 	modelRenderer->Load("model\\player.obj");
@@ -47,11 +48,20 @@ void Player::Update()
 
 	// 移動入力（加算）
 	bool moving = false;
-	if(Input::GetKeyPress('D')) { m_Velocity += right * 50.0f * dt; moving = true; }
-	if(Input::GetKeyPress('A')) { m_Velocity -= right * 50.0f * dt; moving = true; }
+	if(Input::GetKeyPress('D')) { m_Velocity -= right * 50.0f * dt; moving = true; }
+	if(Input::GetKeyPress('A')) { m_Velocity += right * 50.0f * dt; moving = true; }
 	if(Input::GetKeyPress('W')) { m_Velocity -= forward * 50.0f * dt; moving = true; }
 	if(Input::GetKeyPress('S')) { m_Velocity += forward * 50.0f * dt; moving = true; }
+	if (Input::GetKeyTrigger('F'))
+	{
+		OutputDebugStringA("Bullet Create\n");
 
+		Bullet* bullet = Manager::AddGameObject<Bullet>();
+
+		bullet->SetPosition(m_Position);
+
+		bullet->SetVelocity(GetForward() * -25.0f);//弾の速度をプレイヤーの前方に設定（例: 1.0f）
+	}
 	// 地面判定（小さな許容誤差を使用）
 	const float groundEpsilon = 0.001f;
 	bool grounded = (m_Position.y <= groundEpsilon);
