@@ -35,7 +35,7 @@ void Player::Update()
 	const float maxSpeed = 1.0f;  // 最大速度 (units/s)
 	const float friction = 200.0f; // 減速 (units/s^2)
 	const float gravity = 60.0f;   // 重力 (units/s^2)
-	const float jumpImpulse = 25.0f; // ジャンプ初速
+	const float jumpImpulse = 25.0f; // ジャンプ初速aaa (units/s)
 
 	// --- Sprint (Shift) ---
 	// Shiftキーでスプリントさせる: 倍率を変更することで調整可能
