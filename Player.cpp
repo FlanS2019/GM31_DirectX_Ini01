@@ -69,15 +69,15 @@ void Player::Update()
 		}
 	}
 
-	// ‰ñ“]
-	if (Input::GetKeyPress('Q')) // ¶‰ñ“]
-	{
-		m_Rotation.y -= 2.0f * dt; // ‰ñ“]‘¬“x‚Í“K‹X’²®
-	}
-	else if (Input::GetKeyPress('E')) // ‰E‰ñ“]
-	{
-		m_Rotation.y += 2.0f * dt;
-	}
+	//// ‰ñ“]
+	//if (Input::GetKeyPress('Q')) // ¶‰ñ“]
+	//{
+	//	m_Rotation.y -= 2.0f * dt; // ‰ñ“]‘¬“x‚Í“K‹X’²®
+	//}
+	//else if (Input::GetKeyPress('E')) // ‰E‰ñ“]
+	//{
+	//	m_Rotation.y += 2.0f * dt;
+	//}
 
 	// d—Í‚ğ“K—p
 	m_Velocity.y -= gravity * dt;
