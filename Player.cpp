@@ -31,10 +31,10 @@ void Player::Update()
 	// フレーム固定の簡易 dt（実際は実時間差を使うのが望ましい）
 	float dt = 1.0f / 60.0f;
 	// パラメータ
-	const float accel = 5.0f;    // 加速度 (units/s^2)
-	const float maxSpeed = 5.0f;  // 最大速度 (units/s)
-	const float friction = 150.0f; // 減速 (units/s^2)
-	const float gravity = 20.0f;   // 重力 (units/s^2)
+	const float accel = 1.0f;    // 加速度 (units/s^2)
+	const float maxSpeed = 1.0f;  // 最大速度 (units/s)
+	const float friction = 200.0f; // 減速 (units/s^2)
+	const float gravity = 60.0f;   // 重力 (units/s^2)
 	const float jumpImpulse = 25.0f; // ジャンプ初速
 
 	// --- Sprint (Shift) ---
@@ -46,13 +46,17 @@ void Player::Update()
 	Vector3 forward = GetForward();
 	Vector3 right = GetRight();
 
-	// 移動入力（加算）
+	// 移動入力（ワールド基準で速度を与える）
 	bool moving = false;
-	if(Input::GetKeyPress('D')) { m_Velocity += right * 20.0f * dt; moving = true; }
-	if(Input::GetKeyPress('A')) { m_Velocity -= right * 20.0f * dt; moving = true; }
-	if(Input::GetKeyPress('W')) { m_Velocity += forward * 50.0f * dt; moving = true; }
-	if(Input::GetKeyPress('S')) { m_Velocity -= forward * 50.0f * dt; moving = true; }
+	float inputX = 0.0f;
+	float inputZ = 0.0f;
+
+	if (Input::GetKeyPress('D')) { inputX += 0.5f; moving = true; } // 右
+	if (Input::GetKeyPress('A')) { inputX -= 0.5f; moving = true; } // 左
+	if (Input::GetKeyPress('W')) { inputZ += 0.5f; moving = true; } // 前
+	if (Input::GetKeyPress('S')) { inputZ -= 0.5f; moving = true; } // 後ろ
 	m_Rotation.y = atan2f(m_Velocity.x, m_Velocity.z); // 前方ベクトルから Yaw を計算
+
 	// 地面判定（小さな許容誤差を使用）
 	const float groundEpsilon = 0.001f;
 	bool grounded = (m_Position.y <= groundEpsilon);
@@ -91,13 +95,12 @@ void Player::Update()
 	{
 		if (moving)
 		{
-			// 移動中は最大速度でクランプ
-			if (hSpeed > currentMaxSpeed && hSpeed > 0.0f)
-			{
-				float scale = currentMaxSpeed / hSpeed;
-				m_Velocity.x *= scale;
-				m_Velocity.z *= scale;
-			}
+			// 入力方向に速度を与える（ワールド座標基準）
+			m_Velocity.x += inputX * 50.0f * dt;
+			m_Velocity.z += inputZ * 50.0f * dt;
+
+			// 入力した方向にプレイヤーを向ける（速度ではなく入力から計算）
+			m_Rotation.y = atan2f(inputX, inputZ);
 		}
 		else
 		{
