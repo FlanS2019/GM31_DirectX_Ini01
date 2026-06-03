@@ -11,7 +11,7 @@
 
 void Player::Init()
 {
-	m_Position = { 5, 0, 0 };// ‰ŠúˆÊ’u‚ğİ’è
+	m_Position = { 0, 0, 0 };// ‰ŠúˆÊ’u‚ğİ’è
 
 	ModelRenderer* modelRenderer = AddComponent<ModelRenderer>();
 	modelRenderer->Load("model\\player.obj");
