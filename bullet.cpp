@@ -9,7 +9,7 @@
 void Bullet::Init()
 {
 	// 生成側で位置をセットすることを前提にする（Player から SetPosition される）
-	// m_Position = { -5, 0, 0 }; // 削除
+	 m_Position = { 0, 0, 0 }; // 削除
 
 	ModelRenderer* modelRenderer = AddComponent<ModelRenderer>();
 	modelRenderer->Load("model\\bullet.obj");
