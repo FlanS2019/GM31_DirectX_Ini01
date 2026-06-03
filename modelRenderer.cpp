@@ -172,11 +172,6 @@ void ModelRenderer::LoadModel( const char *FileName, MODEL *Model)
 
 }
 
-
-
-
-
-
 //ÉÇÉfÉãì«çû////////////////////////////////////////////
 void ModelRenderer::LoadObj( const char *FileName, MODEL_OBJ *ModelObj )
 {

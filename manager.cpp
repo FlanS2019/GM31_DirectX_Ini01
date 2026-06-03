@@ -27,7 +27,7 @@ void Manager::Init()
 	AddGameObject<Field>();
 	AddGameObject<Player>();
 	AddGameObject<enemy>()->SetPosition({ -2.0f, 0.0f, 1.0f });
-	AddGameObject<Tree>()->SetPosition({ -5.0f, 0.0f, 5.0f });
+	AddGameObject<Tree>()->SetPosition({ -10.0f, 0.0f, -5.0f });
 
 	//AddGameObject<Bullet>();
 	//AddGameObject<Polygon2D>();

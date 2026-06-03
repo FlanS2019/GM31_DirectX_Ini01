@@ -7,7 +7,7 @@
 
 void Camera::Init()
 {
-	m_Position = { 0, 5, -10 };
+	m_Position = { 0, 5, -20 };
 	//m_Yaw = 0.0f;    // 追加
 	//m_Pitch = 0.3f;  // 追加
 	//m_Distance = 8.0f; // 追加
@@ -20,19 +20,18 @@ void Camera::Uninit()
 void Camera::Update()
 {
 	Player* player = Manager::GetGameObject<Player>();
-	if (player == nullptr) return;
-
 	Vector3 playerPos = player->GetPosition();
-	float playerYaw = player->GetRotation().y + XM_PI;// プレイヤーの向きに合わせてカメラも回転させるため、プレイヤーの回転からYawを取得して180度（PIラジアン）加算する
-	// プレイヤーの真後ろにカメラを置く
-	const float distance = 8.0f;//プレイヤーからカメラまでの距離
-	const float height = 4.0f;
 
-	m_Position.x = playerPos.x - sinf(playerYaw) * distance;
-	m_Position.y = playerPos.y + height;
-	m_Position.z = playerPos.z - cosf(playerYaw) * distance;
+	float dt = 1.0f / 60.0f;
 
-	m_Target = playerPos;
+	if (Input::GetKeyPress(VK_RIGHT))
+		m_Rotation.y -= 2.0f * dt;
+	else if (Input::GetKeyPress(VK_LEFT))
+		m_Rotation.y += 2.0f * dt;
+
+	float t = 0.1f;
+	m_Target = m_Target * (1.0f - t) + (playerPos + Vector3(0.0f, 5.0f, 0.0f)) * t;
+	m_Position = m_Target + Vector3(sinf(m_Rotation.y) * 10.0f, 2.5f, -cosf(m_Rotation.y) * 10.0f);
 }
 
 void Camera::Draw()
@@ -43,10 +42,11 @@ void Camera::Draw()
 
 	Renderer::SetProjectionMatrix(projection);
 
-	//view行列の作成
 	XMFLOAT3 up = XMFLOAT3(0, 1, 0);
-	XMMATRIX view = XMMatrixLookAtLH(XMLoadFloat3((XMFLOAT3*)&m_Position),
-		XMLoadFloat3((XMFLOAT3*)&m_Target), XMLoadFloat3(&up));
+	XMFLOAT3 pos = { m_Position.x, m_Position.y, m_Position.z };
+	XMFLOAT3 target = { m_Target.x, m_Target.y, m_Target.z };
+	m_ViewMatrix = XMMatrixLookAtLH(XMLoadFloat3(&pos),
+		XMLoadFloat3(&target), XMLoadFloat3(&up));
 
-	Renderer::SetViewMatrix(view);
+	Renderer::SetViewMatrix(m_ViewMatrix);
 }

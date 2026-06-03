@@ -48,20 +48,11 @@ void Player::Update()
 
 	// 移動入力（加算）
 	bool moving = false;
-	if(Input::GetKeyPress('D')) { m_Velocity -= right * 50.0f * dt; moving = true; }
-	if(Input::GetKeyPress('A')) { m_Velocity += right * 50.0f * dt; moving = true; }
-	if(Input::GetKeyPress('W')) { m_Velocity -= forward * 50.0f * dt; moving = true; }
-	if(Input::GetKeyPress('S')) { m_Velocity += forward * 50.0f * dt; moving = true; }
-	if (Input::GetKeyTrigger('F'))
-	{
-		OutputDebugStringA("Bullet Create\n");
-
-		Bullet* bullet = Manager::AddGameObject<Bullet>();
-
-		bullet->SetPosition(m_Position);
-
-		bullet->SetVelocity(GetForward() * -25.0f);//弾の速度をプレイヤーの前方に設定（例: 1.0f）
-	}
+	if(Input::GetKeyPress('D')) { m_Velocity += right * 20.0f * dt; moving = true; }
+	if(Input::GetKeyPress('A')) { m_Velocity -= right * 20.0f * dt; moving = true; }
+	if(Input::GetKeyPress('W')) { m_Velocity += forward * 50.0f * dt; moving = true; }
+	if(Input::GetKeyPress('S')) { m_Velocity -= forward * 50.0f * dt; moving = true; }
+	m_Rotation.y = atan2f(m_Velocity.x, m_Velocity.z); // 前方ベクトルから Yaw を計算
 	// 地面判定（小さな許容誤差を使用）
 	const float groundEpsilon = 0.001f;
 	bool grounded = (m_Position.y <= groundEpsilon);
@@ -142,6 +133,17 @@ void Player::Update()
 		m_Position.y = 0.0f;
 		if (m_Velocity.y < 0.0f) m_Velocity.y = 0.0f;
 	}
+	if (Input::GetKeyTrigger('F'))
+	{
+		OutputDebugStringA("Bullet Create\n");
+
+		Bullet* bullet = Manager::AddGameObject<Bullet>();
+
+		bullet->SetPosition(m_Position);
+
+		bullet->SetVelocity(GetForward() * 25.0f);//弾の速度をプレイヤーの前方に設定（例: 1.0f）
+	}
+	GameObject::Update();
 }
 void Player::Draw()
 {
@@ -152,7 +154,7 @@ void Player::Draw()
 
 	XMMATRIX world, scale, rot, trans;
 	scale = XMMatrixScaling(m_Scale.x, m_Scale.y, m_Scale.z);//拡大率
-	rot = XMMatrixRotationRollPitchYaw(m_Rotation.x, m_Rotation.y, m_Rotation.z);//回転量
+	rot = XMMatrixRotationRollPitchYaw(m_Rotation.x, m_Rotation.y + XM_PI, m_Rotation.z);//回転量
 	trans = XMMatrixTranslation(m_Position.x, m_Position.y, m_Position.z);//平行移動量
 	world = scale * rot * trans;
 
