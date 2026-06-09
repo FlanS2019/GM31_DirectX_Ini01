@@ -12,6 +12,7 @@ class GameObject
 {
 protected: // サブクラスが扱えるように protected
 	bool m_Destroy = false;
+	int m_Layer = 1;
 
 	Vector3 m_Position{ 0,0,0 };
 	Vector3 m_Rotation{ 0,0,0 };
@@ -20,6 +21,9 @@ protected: // サブクラスが扱えるように protected
 	std::list<Component*> m_Components;
 
 public:
+
+	int GetLayer() { return m_Layer; }
+
 	void SetPosition(const Vector3& position) { m_Position = position; }
 	Vector3 GetPosition() { return m_Position; }
 

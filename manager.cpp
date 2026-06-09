@@ -10,6 +10,8 @@
 #include "enemy.h"
 #include "bullet.h"
 #include "tree.h"
+#include "grass.h"
+#include "explosion.h"
 #include <list>
 
 std::list<GameObject*> Manager::g_GameObject;//リストを使用する場合は、配列ではなくリストを宣言する必要があります。
@@ -27,7 +29,15 @@ void Manager::Init()
 	AddGameObject<Field>();
 	AddGameObject<Player>();
 	AddGameObject<enemy>()->SetPosition({ -2.0f, 0.0f, 1.0f });
+	AddGameObject<enemy>()->SetPosition({ -3.0f, 0.0f, 1.0f });
+	AddGameObject<enemy>()->SetPosition({ -4.0f, 0.0f, 1.0f });
+	AddGameObject<enemy>()->SetPosition({ -5.0f, 0.0f, 1.0f });
+	AddGameObject<enemy>()->SetPosition({ -6.0f, 0.0f, 1.0f });
+	AddGameObject<enemy>()->SetPosition({ -7.0f, 0.0f, 1.0f });
+
 	AddGameObject<Tree>()->SetPosition({ -10.0f, 0.0f, -5.0f });
+	AddGameObject<Grass>()->SetPosition({ 5.0f, 0.0f, 3.0f });
+	//AddGameObject<Explosion>()->SetPosition({ 0.0f, 0.0f, 5.0f });
 
 	//AddGameObject<Bullet>();
 	//AddGameObject<Polygon2D>();
@@ -67,16 +77,25 @@ void Manager::Update()
 			++it;
 		}
 	}
+	if(Input::GetKeyTrigger(VK_F1))
+	{
+		AddGameObject<enemy>()->SetPosition({ 8.0f, 0.0f, 1.0f });
+	}
 }
 
 void Manager::Draw()
 {
 	Renderer::Begin();
 
-	for (GameObject* gameObject : g_GameObject)
+	for(int layer = 0; layer <= 10; layer++) // レイヤー順に描画
 	{
-		gameObject->Draw();
+		for (GameObject* gameObject : g_GameObject)
+		{
+			if(gameObject->GetLayer() == layer)
+			{
+				gameObject->Draw();
+			}
+		}
 	}
-
 	Renderer::End();
 }
