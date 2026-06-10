@@ -127,8 +127,10 @@
     <ClCompile Include="bullet.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="enemy.cpp" />
+    <ClCompile Include="explosion.cpp" />
     <ClCompile Include="field.cpp" />
     <ClCompile Include="gameObject.cpp" />
+    <ClCompile Include="Grass.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="manager.cpp" />
@@ -138,8 +140,10 @@
     <ClInclude Include="CameraComponen.h" />
     <ClInclude Include="component.h" />
     <ClInclude Include="enemy.h" />
+    <ClInclude Include="explosion.h" />
     <ClInclude Include="field.h" />
     <ClInclude Include="gameObject.h" />
+    <ClInclude Include="Grass.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="modelRenderer.h" />
     <ClInclude Include="Player.h" />

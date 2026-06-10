@@ -5,6 +5,7 @@
 #include "Input.h"
 #include "manager.h"
 #include "enemy.h"
+#include "explosion.h" // 追加
 
 void Bullet::Init()
 {
@@ -38,6 +39,13 @@ void Bullet::Update()
 		float length = direction.length();
 		if (length < 0.5f) // 当たり判定の半径（例: 0.5f）
 		{
+			// 爆発エフェクトを生成
+			Explosion* exp = Manager::AddGameObject<Explosion>();
+			if (exp)
+			{
+				exp->SetPosition(enemy->GetPosition());
+			}
+
 			enemy->SetDestroy(true); // 敵を Destroy
 			SetDestroy(true); // 弾も Destroy
 			return; // 当たったらこれ以上処理しない

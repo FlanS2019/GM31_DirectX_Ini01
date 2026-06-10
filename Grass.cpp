@@ -1,12 +1,12 @@
-//tree.cpp
+//grass.cpp
 
-#include "tree.h"
+#include "grass.h"
 #include "main.h"
 #include "renderer.h"
 #include "manager.h"
 #include "camera.h"
 
-void Tree::Init()
+void Grass::Init()
 
 {
 
@@ -76,13 +76,13 @@ void Tree::Init()
 
 	ScratchImage image{};
 
-	LoadFromWICFile(L"texture\\tree.png", WIC_FLAGS_NONE, &metadata, image);
+	LoadFromWICFile(L"texture\\grass.png", WIC_FLAGS_NONE, &metadata, image);
 
 	CreateShaderResourceView(Renderer::GetDevice(), image.GetImages(), image.GetImageCount(), metadata, &m_Texture);
 
 }
 
-void Tree::Uninit()
+void Grass::Uninit()
 
 {
 
@@ -98,13 +98,13 @@ void Tree::Uninit()
 
 }
 
-void Tree::Update()
+void Grass::Update()
 
 {
 
 }
 
-void Tree::Draw()
+void Grass::Draw()
 
 {
 
@@ -139,33 +139,47 @@ void Tree::Draw()
 	/* ベクトルの長さを1に再正規化。 */
 
 	XMVECTOR right = XMVector3Normalize(invView.r[0]);
+
 	XMVECTOR forward = XMVector3Normalize(invView.r[2]);
 
 	invView.r[0] = right;
+
 	invView.r[2] = forward;
 
 	/* 平行移動成分をクリア。 */
 
 	invView.r[3].m128_f32[0] = 0.0f;
+
 	invView.r[3].m128_f32[1] = 0.0f;
+
 	invView.r[3].m128_f32[2] = 0.0f;
 
 	XMMATRIX world, scale, trans;
 
 	scale = XMMatrixScaling(m_Scale.x, m_Scale.y, m_Scale.z); /* 拡大縮小。 */
+
 	trans = XMMatrixTranslation(m_Position.x, m_Position.y, m_Position.z); /* 平行移動。 */
+
 	world = scale * invView * trans;
 
 	Renderer::SetWorldMatrix(world);
 
 	MATERIAL material{};
+
 	material.Diffuse = { 1.0f, 1.0f, 1.0f, 1.0f };
+
 	material.TextureEnable = TRUE; /* テクスチャ有効化。 */
 
 	Renderer::SetMaterial(material);
+
 	UINT stride = sizeof(VERTEX_3D);
+
 	UINT offset = 0;
+
 	Renderer::GetDeviceContext()->IASetVertexBuffers(0, 1, &m_VertexBuffer, &stride, &offset);
+
 	Renderer::GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+
 	Renderer::GetDeviceContext()->Draw(4, 0);
+
 }
