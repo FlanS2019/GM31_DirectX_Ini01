@@ -8,6 +8,8 @@
 #include "bullet.h"
 #include <cmath>
 #include <algorithm>
+#include "tree.h"
+#include "box.h"
 
 void Player::Init()
 {
@@ -32,8 +34,8 @@ void Player::Update()
 	float dt = 1.0f / 60.0f;
 	// パラメータ
 	const float accel = 1.0f;    // 加速度 (units/s^2)
-	const float maxSpeed = 1.0f;  // 最大速度 (units/s)
-	const float friction = 200.0f; // 減速 (units/s^2)
+	const float maxSpeed = 5.0f;  // 最大速度 (units/s)
+	const float friction = 15.0f; // 減速 (units/s^2)
 	const float gravity = 60.0f;   // 重力 (units/s^2)
 	const float jumpImpulse = 25.0f; // ジャンプ初速aaa (units/s)
 
@@ -60,6 +62,8 @@ void Player::Update()
 	// 地面判定（小さな許容誤差を使用）
 	const float groundEpsilon = 0.001f;
 	bool grounded = (m_Position.y <= groundEpsilon);
+	bool oldGround = m_Grounded;
+	m_Grounded = false;
 
 	// 地面上でのジャンプトリガーはここで判定（GetKeyTrigger は Input::Update の後に呼ばれる必要あり）
 	if (grounded)
@@ -70,7 +74,25 @@ void Player::Update()
 		if (Input::GetKeyTrigger(VK_SPACE))
 		{
 			m_Velocity.y = jumpImpulse;
+
+			m_Scale.x = 1.0f;
+			m_Scale.y = 1.5f; // ジャンプしたときに一瞬伸びる
+			m_Scale.z = 1.0f;
 		}
+		else
+		{
+			m_Scale.x = 1.0f;
+			m_Scale.y = 1.0f;
+			m_Scale.z = 1.0f;
+		}
+
+		if(!oldGround && m_Grounded)
+		{
+			m_Scale.x = 1.0f;
+			m_Scale.y = 0.5f; // ジャンプから着地したときに一瞬潰れる
+			m_Scale.z = 1.0f;
+		}
+
 	}
 
 	//// 回転
@@ -96,9 +118,16 @@ void Player::Update()
 		if (moving)
 		{
 			// 入力方向に速度を与える（ワールド座標基準）
-			m_Velocity.x += inputX * 50.0f * dt;
-			m_Velocity.z += inputZ * 50.0f * dt;
+			m_Velocity.x += inputX * 15.0f * dt;
+			m_Velocity.z += inputZ * 15.0f * dt;
 
+			float currentSpeed = std::sqrt(m_Velocity.x * m_Velocity.x + m_Velocity.z * m_Velocity.z);
+			if (currentSpeed > maxSpeed * sprintMultiplier)
+			{
+				float inv = maxSpeed / currentSpeed;
+				m_Velocity.x *= inv;
+				m_Velocity.z *= inv;
+			}
 			// 入力した方向にプレイヤーを向ける（速度ではなく入力から計算）
 			m_Rotation.y = atan2f(inputX, inputZ);
 		}
@@ -135,8 +164,53 @@ void Player::Update()
 	{
 		m_Position.y = 0.0f;
 		if (m_Velocity.y < 0.0f) m_Velocity.y = 0.0f;
+		m_Grounded = true;
 	}
-	if (Input::GetKeyTrigger('F'))
+	//木の当たり判定
+	auto trees = Manager::GetGameObjects<Tree>();
+	for (auto tree : trees)
+	{
+		Vector3 direction = tree->GetPosition() - m_Position;// プレイヤーと木の位置の差を計算
+		float length = direction.length();// プレイヤーと木の距離を計算
+		if (length < 1.0f) // 当たり判定の半径（例: 1.0f）
+		{
+			// プレイヤーを木から押し出す
+			Vector3 pushDir = direction * (1.0f - length); // 押し出す距離を計算
+			m_Position -= pushDir; // プレイヤーを押し出す
+		}
+	}
+	//ボックスとの衝突判定
+	auto boxes = Manager::GetGameObjects<Box>();
+	for (auto box : boxes)
+	{
+		Vector3 boxPosition = box->GetPosition();
+		Vector3 boxScale = box->GetScale();
+		if(boxPosition.x - boxScale.x < m_Position.x && m_Position.x < boxPosition.x + boxScale.x &&
+		   boxPosition.y - boxScale.y < m_Position.y && m_Position.y < boxPosition.y + boxScale.y &&
+		   boxPosition.z - boxScale.z < m_Position.z && m_Position.z < boxPosition.z + boxScale.z)
+		{
+			if(boxPosition.y + boxScale.y - m_Position.y < m_Position.y - (boxPosition.y - boxScale.y))
+			{
+				// 上から衝突
+				m_Position.y = boxPosition.y + boxScale.y;
+				if (m_Velocity.y < 0.0f) m_Velocity.y = 0.0f;
+				m_Grounded = true; // ジャンプしたので地面から離れる
+			}
+			else
+			{
+				// 横から衝突
+				if(m_Position.x < boxPosition.x)
+				{
+					m_Position.x = boxPosition.x - boxScale.x;
+				}
+				else
+				{
+					m_Position.x = boxPosition.x + boxScale.x;
+				}
+			}
+		}
+	}
+	if (Input::GetKeyTrigger('F'))//弾発射
 	{
 		OutputDebugStringA("Bullet Create\n");
 
@@ -146,6 +220,12 @@ void Player::Update()
 
 		bullet->SetVelocity(GetForward() * 25.0f);//弾の速度をプレイヤーの前方に設定（例: 1.0f）
 	}
+	if (m_Grounded)
+	{
+		m_MoveAnimetion += m_Velocity.length() * dt;
+		m_Scale.y += sinf(m_MoveAnimetion * 3.0f) * 0.05f;
+	}
+
 	GameObject::Update();
 }
 void Player::Draw()

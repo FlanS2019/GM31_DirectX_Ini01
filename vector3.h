@@ -85,6 +85,10 @@ public:
 	{
 		return sqrtf(x * x + y * y + z * z);
 	}
+	static float dot(Vector3& a,Vector3& b)
+	{
+		return a.x * b.x + a.y * b.y + a.z * b.z;
+	}
 	static Vector3 cross(const Vector3& a, const Vector3& b)
 	{
 		return Vector3(

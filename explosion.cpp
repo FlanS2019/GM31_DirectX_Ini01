@@ -8,6 +8,8 @@
 
 void Explosion::Init()
 {
+	m_Layer = 2;
+
 	VERTEX_3D vertex[4];
 
 	/* 頂点のY座標に高さを設定し、板ポリゴンとしての面積を持たせます。 */

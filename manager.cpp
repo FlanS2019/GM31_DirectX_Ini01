@@ -13,6 +13,7 @@
 #include "grass.h"
 #include "explosion.h"
 #include <list>
+#include "box.h"
 
 std::list<GameObject*> Manager::g_GameObject;//リストを使用する場合は、配列ではなくリストを宣言する必要があります。
 
@@ -28,18 +29,19 @@ void Manager::Init()
 	AddGameObject<Camera>();
 	AddGameObject<Field>();
 	AddGameObject<Player>();
-	AddGameObject<enemy>()->SetPosition({ -2.0f, 0.0f, 1.0f });
-	AddGameObject<enemy>()->SetPosition({ -3.0f, 0.0f, 1.0f });
-	AddGameObject<enemy>()->SetPosition({ -4.0f, 0.0f, 1.0f });
-	AddGameObject<enemy>()->SetPosition({ -5.0f, 0.0f, 1.0f });
-	AddGameObject<enemy>()->SetPosition({ -6.0f, 0.0f, 1.0f });
-	AddGameObject<enemy>()->SetPosition({ -7.0f, 0.0f, 1.0f });
-
-	AddGameObject<Tree>()->SetPosition({ -10.0f, 0.0f, -5.0f });
-	AddGameObject<Grass>()->SetPosition({ 5.0f, 0.0f, 3.0f });
+	//木を10個増やす
+	for (int i = 0; i < 10; i++)
+	{
+		AddGameObject<Tree>()->SetPosition({ -10.0f + i *2.0f, 0.0f, 10.0f });
+		AddGameObject<enemy>()->SetPosition({ -2.0f + i * 2.0f, 0.0f, 1.0f });
+	}
+	//AddGameObject<Grass>()->SetPosition({ 5.0f, 0.0f, 3.0f });
+	Box* box = AddGameObject<Box>();
+	box->SetPosition({ 0.0f, 0.0f, 5.0f });
+	box->SetScale({ 2.0f, 2.0f, 2.0f });
 	//AddGameObject<Explosion>()->SetPosition({ 0.0f, 0.0f, 5.0f });
 
-	//AddGameObject<Bullet>();
+	//AddGameObjsect<Bullet>();
 	//AddGameObject<Polygon2D>();
 }
 
@@ -86,16 +88,38 @@ void Manager::Update()
 void Manager::Draw()
 {
 	Renderer::Begin();
+	Camera* camera = GetGameObject<Camera>();
+	Vector3 forward = camera->GetForward();
+	Vector3 position = camera->GetPosition();
 
-	for(int layer = 0; layer <= 10; layer++) // レイヤー順に描画
+	for ( GameObject* gameObject : g_GameObject )
+	{
+		gameObject->CalCameraZ(position, forward);
+	}
+	//z sort
+	g_GameObject.sort([](GameObject* a, GameObject* b) {
+		return a->GetCameraZ() > b->GetCameraZ(); // カメラから遠い順にソート
+	});
+
+	for (int i = 0 ; i < 4; i++) // ソート後の順番で描画
 	{
 		for (GameObject* gameObject : g_GameObject)
 		{
-			if(gameObject->GetLayer() == layer)
+			if (gameObject->GetLayer() == i)
 			{
 				gameObject->Draw();
 			}
 		}
 	}
+	//for(int layer = 0; layer <= 10; layer++) // レイヤー順に描画
+	//{
+	//	for (GameObject* gameObject : g_GameObject)
+	//	{
+	//		if(gameObject->GetLayer() == layer)
+	//		{
+	//			gameObject->Draw();
+	//		}
+	//	}
+	//}
 	Renderer::End();
 }

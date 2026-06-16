@@ -14,6 +14,8 @@ protected: // サブクラスが扱えるように protected
 	bool m_Destroy = false;
 	int m_Layer = 1;
 
+	float m_CameraZ;
+
 	Vector3 m_Position{ 0,0,0 };
 	Vector3 m_Rotation{ 0,0,0 };
 	Vector3 m_Scale{ 1,1,1 };
@@ -23,6 +25,14 @@ protected: // サブクラスが扱えるように protected
 public:
 
 	int GetLayer() { return m_Layer; }
+
+	float GetCameraZ() const { return m_CameraZ; }
+	void CalCameraZ(Vector3 CameraPosition, 
+		Vector3 CameraForward)
+	{
+		Vector3 direction = m_Position - CameraPosition;
+		m_CameraZ = Vector3::dot(direction, CameraForward);
+	}
 
 	void SetPosition(const Vector3& position) { m_Position = position; }
 	Vector3 GetPosition() { return m_Position; }
