@@ -5,7 +5,6 @@
 #include "renderer.h"
 #include "manager.h"
 #include "camera.h"
-#include "Input.h"
 #include <winerror.h>
 
 void Particle::Init()
@@ -103,14 +102,6 @@ void Particle::Update()
 			 {
 				 m_Particle[i].Life--; /* 寿命の減少。 */
 			 }
-		}
-	}
-	//パーティクルの停止
-	if(Input::GetKeyTrigger('P'))
-	{
-		for (int i = 0; i < MAX_PARTICLES; i++)
-		{
-			m_Particle[i].Enable = false;
 		}
 	}
 }

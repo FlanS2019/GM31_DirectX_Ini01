@@ -85,6 +85,19 @@ void Manager::Update()
 	{
 		AddGameObject<enemy>()->SetPosition({ 8.0f, 0.0f, 1.0f });
 	}
+	//パーティクルの停止
+	if (Input::GetKeyTrigger(VK_F2))
+	{
+		Particle* particle = GetGameObject<Particle>();
+		if(particle)
+		{
+			particle->SetDestroy(true);
+		}
+	}
+	if(Input::GetKeyTrigger(VK_F3))
+	{
+		AddGameObject<Particle>()->SetPosition({ -2.0f, 1.0f, 2.0f });
+	}
 }
 
 void Manager::Draw()
