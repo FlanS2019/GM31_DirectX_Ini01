@@ -124,6 +124,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="box.cpp" />
     <ClCompile Include="bullet.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="enemy.cpp" />
@@ -134,7 +135,9 @@
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="manager.cpp" />
+    <ClCompile Include="particle.cpp" />
     <ClCompile Include="tree.cpp" />
+    <ClInclude Include="box.h" />
     <ClInclude Include="bullet.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="CameraComponen.h" />
@@ -146,6 +149,7 @@
     <ClInclude Include="Grass.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="modelRenderer.h" />
+    <ClInclude Include="particle.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="polygon2d.h" />
     <ClCompile Include="modelRenderer.cpp" />

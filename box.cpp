@@ -1,27 +1,27 @@
 #include "main.h"
-#include "enemy.h"
+#include "Box.h"
 #include "renderer.h"
 #include "modelRenderer.h"
 #include "Input.h"
 
-void enemy::Init()
+void Box::Init()
 {
-	m_Position = { -5, 0, 0 };
+	//m_Position = { -5, 1, 0 };
 
 	ModelRenderer* modelRenderer = AddComponent<ModelRenderer>();
-	modelRenderer->Load("model\\player.obj");
+	modelRenderer->Load("model\\box.obj");
 
 	Renderer::CreateVertexShader(&m_VertexShader, &m_VertexLayout, "shader\\unlitTextureVS.cso");
 	Renderer::CreatePixelShader(&m_PixelShader, "shader\\unlitTexturePS.cso");
 
 }
-void enemy::Uninit()
+void Box::Uninit()
 {
 	if (m_VertexLayout) { m_VertexLayout->Release(); m_VertexLayout = nullptr; }
 	if (m_VertexShader) { m_VertexShader->Release(); m_VertexShader = nullptr; }
 	if (m_PixelShader) { m_PixelShader->Release(); m_PixelShader = nullptr; }
 }
-void enemy::Update()
+void Box::Update()
 {
 	//m_Position.x += m_Velocity.x;
 	//m_Position.y += m_Velocity.y;
@@ -44,9 +44,9 @@ void enemy::Update()
 	//	m_Position.z += 5 * dt;
 	//}
 }
-void enemy::Draw()
+void Box::Draw()
 {
-    Renderer::GetDeviceContext()->IASetInputLayout(m_VertexLayout);
+	Renderer::GetDeviceContext()->IASetInputLayout(m_VertexLayout);
 
 	Renderer::GetDeviceContext()->VSSetShader(m_VertexShader, NULL, 0);
 	Renderer::GetDeviceContext()->PSSetShader(m_PixelShader, NULL, 0);
