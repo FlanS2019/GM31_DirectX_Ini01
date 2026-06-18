@@ -46,7 +46,7 @@ void enemy::Update()
 }
 void enemy::Draw()
 {
-	Renderer::GetDeviceContext()->IASetInputLayout(m_VertexLayout);
+    Renderer::GetDeviceContext()->IASetInputLayout(m_VertexLayout);
 
 	Renderer::GetDeviceContext()->VSSetShader(m_VertexShader, NULL, 0);
 	Renderer::GetDeviceContext()->PSSetShader(m_PixelShader, NULL, 0);
