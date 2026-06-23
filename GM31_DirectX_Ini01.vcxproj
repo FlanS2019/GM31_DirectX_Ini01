@@ -130,12 +130,15 @@
     <ClCompile Include="enemy.cpp" />
     <ClCompile Include="explosion.cpp" />
     <ClCompile Include="field.cpp" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="gameObject.cpp" />
     <ClCompile Include="Grass.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="manager.cpp" />
     <ClCompile Include="particle.cpp" />
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="title.cpp" />
     <ClCompile Include="tree.cpp" />
     <ClInclude Include="box.h" />
     <ClInclude Include="bullet.h" />
@@ -145,6 +148,7 @@
     <ClInclude Include="enemy.h" />
     <ClInclude Include="explosion.h" />
     <ClInclude Include="field.h" />
+    <ClInclude Include="Game.h" />
     <ClInclude Include="gameObject.h" />
     <ClInclude Include="Grass.h" />
     <ClInclude Include="Input.h" />
@@ -161,6 +165,8 @@
     <ClInclude Include="main.h" />
     <ClInclude Include="manager.h" />
     <ClInclude Include="renderer.h" />
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="title.h" />
     <ClInclude Include="transform.h" />
     <ClInclude Include="tree.h" />
     <ClInclude Include="vector3.h" />

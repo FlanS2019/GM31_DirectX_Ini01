@@ -1,79 +1,70 @@
+//manager.cpp
 #include "main.h"
 #include "manager.h"
 #include "renderer.h"
-#include "polygon2d.h"
-#include "field.h"
-#include "camera.h"
-#include "player.h"
 #include "Input.h"
+#include "camera.h"
 #include "gameObject.h"
-#include "enemy.h"
-#include "bullet.h"
-#include "tree.h"
-#include "grass.h"
-#include "explosion.h"
-#include "box.h"
-#include "particle.h"
-#include <list>
+#include "title.h"
+#include "Game.h"
 
 std::list<GameObject*> Manager::g_GameObject;//リストを使用する場合は、配列ではなくリストを宣言する必要があります。
-
-//GameObject* g_GameObject[3];
+Scene* Manager::m_Scene = nullptr;
+Scene* Manager::m_NextScene = nullptr;
+float Manager::m_ChangeTime = 0.0f;
 
 void Manager::Init()
 {
 	Renderer::Init();
 	Input::Init();
-
-	GameObject* gameObject = nullptr;
-
-	AddGameObject<Camera>();
-	AddGameObject<Field>();
-	AddGameObject<Player>();
-	AddGameObject<Tree>()->SetPosition({ -10.0f, 0.0f, 10.0f });
-	AddGameObject<Particle>()->SetPosition({ -2.0f, 1.0f, 2.0f });
-	//木を10個増やす
-	for (int i = 0; i < 10; i++)
-	{
-		AddGameObject<enemy>()->SetPosition({ -2.0f + i * 2.0f, 0.0f, 1.0f });
-	}
-	//AddGameObject<Grass>()->SetPosition({ 5.0f, 0.0f, 3.0f });
-	Box* box = AddGameObject<Box>();
-	box->SetPosition({ 2.0f, 0.0f, 5.0f });
-	box->SetScale({ 2.0f, 2.0f, 2.0f });
-	//AddGameObject<Explosion>()->SetPosition({ 0.0f, 0.0f, 5.0f });
-
-	//AddGameObjsect<Bullet>();
-	//AddGameObject<Polygon2D>();
+	ChangeScene<Title>();
 }
 
 void Manager::Uninit()
 {
+	if(m_Scene != nullptr)
+	{
+		m_Scene->Uninit();
+		delete m_Scene;
+	}
+
 	for(GameObject* gameObject : g_GameObject)
 	{
 		gameObject->Uninit();
 		delete gameObject;
 	}
+	g_GameObject.clear();
 	Renderer::Uninit();
 	Input::Uninit();
 }
 
 void Manager::Update()
 {
+	float dt = 1.0f / 60.0f;
+
 	Input::Update();
 
-	for (GameObject* gameObject : g_GameObject)
+	if (m_Scene != nullptr)
 	{
-		gameObject->Update();
+		m_Scene->Update();
 	}
 
-	// Destroyされたオブジェクトを削除
-	for (auto it = g_GameObject.begin(); it != g_GameObject.end();)
+	// アクティブなオブジェクトのみ更新
+	for (GameObject* gameObject : g_GameObject)
 	{
-		if ((*it)->Destroy())
+		if (gameObject->GetActive())
+		{
+			gameObject->Update();
+		}
+	}
+
+	// Destroy対象削除
+	for (auto it = g_GameObject.begin(); it != g_GameObject.end(); )
+	{
+		if ((*it)->IsDestroy())
 		{
 			(*it)->Uninit();
-			delete* it;
+			delete (*it);
 			it = g_GameObject.erase(it);
 		}
 		else
@@ -81,56 +72,64 @@ void Manager::Update()
 			++it;
 		}
 	}
-	if(Input::GetKeyTrigger(VK_F1))
+
+	if (m_NextScene != nullptr)
 	{
-		AddGameObject<enemy>()->SetPosition({ 8.0f, 0.0f, 1.0f });
-	}
-	//パーティクルの停止
-	if (Input::GetKeyTrigger(VK_F2))
-	{
-		Particle* particle = GetGameObject<Particle>();
-		if(particle)
+		m_ChangeTime -= dt;
+
+		if (m_ChangeTime < 0.0f)
 		{
-			particle->SetDestroy(true);
+			if (m_Scene != nullptr)
+			{
+				m_Scene->Uninit();
+				delete m_Scene;
+			}
+
+			for (GameObject* gameObject : g_GameObject)
+			{
+				gameObject->Uninit();
+				delete gameObject;
+			}
+
+			g_GameObject.clear();
+
+			m_Scene = m_NextScene;
+			m_Scene->Init();
+
+			m_NextScene = nullptr;
 		}
-	}
-	if(Input::GetKeyTrigger(VK_F3))
-	{
-		AddGameObject<Particle>()->SetPosition({ -2.0f, 1.0f, 2.0f });
 	}
 }
 
 void Manager::Draw()
 {
 	Renderer::Begin();
+
 	Camera* camera = GetGameObject<Camera>();
-	Vector3 forward = camera->GetForward();
-	Vector3 position = camera->GetPosition();
 
-	for ( GameObject* gameObject : g_GameObject )
+	if (camera)
 	{
-		gameObject->CalCameraZ(position, forward);
-	}
-	//z sort
-	g_GameObject.sort([](GameObject* a, GameObject* b) {
-		return a->GetCameraZ() > b->GetCameraZ(); // カメラから遠い順にソート
-	});
+		Vector3 forward = camera->GetForward();
+		Vector3 position = camera->GetPosition();
 
-	for (int i = 0 ; i < 4; i++) // ソート後の順番で描画
-	{
 		for (GameObject* gameObject : g_GameObject)
 		{
-			if (gameObject->GetLayer() == i)
-			{
-				gameObject->Draw();
-			}
+			gameObject->CalCameraZ(position, forward);
 		}
+
+		// Zソート
+		g_GameObject.sort([](GameObject* a, GameObject* b)
+			{
+				return a->GetCameraZ() > b->GetCameraZ();
+			});
 	}
-	for(int layer = 0; layer <= 10; layer++) // レイヤー順に描画
+
+	for (int layer = 0; layer <= 10; layer++)
 	{
 		for (GameObject* gameObject : g_GameObject)
 		{
-			if(gameObject->GetLayer() == layer)
+			if (gameObject->GetLayer() == layer &&
+				gameObject->GetActive())
 			{
 				gameObject->Draw();
 			}

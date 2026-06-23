@@ -22,6 +22,8 @@ protected: // サブクラスが扱えるように protected
 
 	std::list<Component*> m_Components;
 
+	bool m_Active = true;
+
 public:
 
 	int GetLayer() { return m_Layer; }
@@ -115,5 +117,19 @@ public:
 		{
 			return false;
 		}
+	}
+	bool IsDestroy() const
+	{
+		return m_Destroy;
+	}
+	// アクティブ状態の設定と取得
+	void SetActive(bool active)
+	{
+		m_Active = active;
+	}
+
+	bool GetActive() const
+	{
+		return m_Active;
 	}
 };

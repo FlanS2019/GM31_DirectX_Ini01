@@ -15,7 +15,8 @@ private:
 	ID3D11ShaderResourceView* m_Texture;
 
 public:
-	void Init()override;
+	void Init()override {};
+	void Init(float x, float y, float width, float Height, const WCHAR* TextureName);
 	void Uninit()override;
 	void Update()override;
 	void Draw()override;
