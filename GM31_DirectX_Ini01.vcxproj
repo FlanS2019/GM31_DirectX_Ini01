@@ -138,6 +138,7 @@
     <ClCompile Include="manager.cpp" />
     <ClCompile Include="particle.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="Score.cpp" />
     <ClCompile Include="title.cpp" />
     <ClCompile Include="tree.cpp" />
     <ClInclude Include="box.h" />
@@ -166,6 +167,7 @@
     <ClInclude Include="manager.h" />
     <ClInclude Include="renderer.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="Score.h" />
     <ClInclude Include="title.h" />
     <ClInclude Include="transform.h" />
     <ClInclude Include="tree.h" />

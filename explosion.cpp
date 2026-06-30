@@ -8,7 +8,7 @@
 
 void Explosion::Init()
 {
-	m_Layer = 2;
+	m_Layer = 5;
 
 	VERTEX_3D vertex[4];
 

@@ -13,6 +13,8 @@
 
 void Player::Init()
 {
+	m_Layer = 2;
+
 	m_Position = { 0, 0, 0 };// ‰ŠúˆÊ’u‚ğİ’è
 
 	ModelRenderer* modelRenderer = AddComponent<ModelRenderer>();

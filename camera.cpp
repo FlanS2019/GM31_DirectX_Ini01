@@ -30,8 +30,16 @@ void Camera::Update()
 		m_Rotation.y += 2.0f * dt;
 
 	float t = 0.1f;
-	m_Target = m_Target * (1.0f - t) + (playerPos + Vector3(0.0f, 5.0f, 0.0f)) * t;
-	m_Position = m_Target + Vector3(sinf(m_Rotation.y) * 10.0f, 2.5f, -cosf(m_Rotation.y) * 10.0f);
+
+	m_Target = m_Target * (1.0f - t)
+		+ (playerPos + Vector3(0.0f, 2.0f, 0.0f)) * t;
+
+	m_Position = m_Target
+		+ Vector3(
+			sinf(m_Rotation.y) * 15.0f,
+			8.0f,
+			-cosf(m_Rotation.y) * 15.0f
+		);
 }
 
 void Camera::Draw()

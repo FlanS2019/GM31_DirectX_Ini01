@@ -17,6 +17,7 @@
 #include "particle.h"
 #include "Game.h"
 #include "title.h"
+#include "Score.h"
 #include <list>
 
 
@@ -29,6 +30,7 @@ void Game::Init()
 	Manager::AddGameObject<Player>();
 	Manager::AddGameObject<Tree>()->SetPosition({ -10.0f, 0.0f, 10.0f });
 	Manager::AddGameObject<Particle>()->SetPosition({ -2.0f, 1.0f, 2.0f });
+	Manager::AddGameObject<Score>()->Init();
 	//–Ø‚ğ10ŒÂ‘‚â‚·
 	for (int i = 0; i < 10; i++)
 	{
@@ -38,6 +40,7 @@ void Game::Init()
 	Box* box = Manager::AddGameObject<Box>();
 	box->SetPosition({ 2.0f, 0.0f, 5.0f });
 	box->SetScale({ 2.0f, 2.0f, 2.0f });
+
 
 	//Manager::AddGameObject<Polygon2D>()->Init(0.0f, 0.0f, 200.0f, 200.0f,L"texture\\jimen.jpg");
 	//Manager::AddGameObject<Grass>()->SetPosition({ 5.0f, 0.0f, 3.0f });

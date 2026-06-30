@@ -6,9 +6,11 @@
 #include "manager.h"
 #include "enemy.h"
 #include "explosion.h" // 追加
+#include "Score.h" // 追加
 
 void Bullet::Init()
 {
+	m_Layer = 2;
 	// 生成側で位置をセットすることを前提にする（Player から SetPosition される）
 	 m_Position = { 0, 0, 0 }; // 削除
 
@@ -44,6 +46,13 @@ void Bullet::Update()
 			if (exp)
 			{
 				exp->SetPosition(enemy->GetPosition());
+			}
+
+			// ---- スコア加算 ----
+			auto scores = Manager::GetGameObjects<Score>();
+			for (auto score : scores)
+			{
+				score->AddScore(1);
 			}
 
 			enemy->SetDestroy(true); // 敵を Destroy

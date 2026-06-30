@@ -69,6 +69,8 @@ void Particle::Uninit()
 void Particle::Update()
 {
 	float dt = 1.0f / 60.0f;
+	int count = 30;	
+
 	for (int i = 0; i < MAX_PARTICLES; i++)
 	{
 		if (m_Particle[i].Enable == false)
@@ -77,10 +79,12 @@ void Particle::Update()
 			m_Particle[i].Life = 60; /* Žõ–½‚Ì‰Šú‰»B */
 			m_Particle[i].Position = m_Position;
 
-			m_Particle[i].Velocity.x = ((float)rand() / RAND_MAX - 0.5f) * 12.0f;
+			m_Particle[i].Velocity.x = ((float)rand() / RAND_MAX - 0.5f) * 10.0f;
 			m_Particle[i].Velocity.y = ((float)rand() / RAND_MAX) * 12.0f;
-			m_Particle[i].Velocity.z = ((float)rand() / RAND_MAX - 0.5f) * 12.0f;
+			m_Particle[i].Velocity.z = ((float)rand() / RAND_MAX - 0.5f) * 10.0f;
 
+			count--;
+			if (count <= 0)
 			break;
 		}
 	}
