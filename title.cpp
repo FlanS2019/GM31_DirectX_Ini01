@@ -18,7 +18,7 @@ void Title::Uninit()
 
 void Title::Update()
 {
-	if(Input::GetKeyPress(VK_RETURN))
+	if(Input::GetKeyTrigger(VK_RETURN))
 	{
 		Manager::ChangeScene<Game>();
 	}
