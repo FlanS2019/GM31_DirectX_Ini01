@@ -9,7 +9,7 @@
 void Title::Init()
 {
 	//タイトル画面の背景画像を表示するためのPolygon2Dオブジェクトを作成
-	Manager::AddGameObject<Polygon2D>()->Init(0.0f, 0.0f, SCREEN_WIDTH,SCREEN_HEIGHT, L"texture\\cinnamon.jpg");
+	Manager::AddGameObject<Polygon2D>()->Init(0.0f, 0.0f, SCREEN_WIDTH,SCREEN_HEIGHT, L"texture\\image.png");
 }
 
 void Title::Uninit()

@@ -6,6 +6,7 @@
 #include "camera.h"
 #include "gameObject.h"
 #include "title.h"
+#include "result.h"
 #include "Game.h"
 
 std::list<GameObject*> Manager::g_GameObject;//リストを使用する場合は、配列ではなくリストを宣言する必要があります。
@@ -18,6 +19,7 @@ void Manager::Init()
 	Renderer::Init();
 	Input::Init();
 	ChangeScene<Title>();
+	ChangeScene<result>();
 }
 
 void Manager::Uninit()
