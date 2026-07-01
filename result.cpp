@@ -20,7 +20,6 @@ void result::Uninit()
 
 void result::Update()
 {	
-	//なぜかエンターキーに設定するとリザルト-＞タイトル-＞ゲームのタイトルを飛ばしていくので仮でF6に設定
 	if(Input::GetKeyTrigger(VK_RETURN))
 	{
 		Manager::ChangeScene<Title>();
