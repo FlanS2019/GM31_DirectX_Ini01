@@ -19,7 +19,11 @@ void result::Uninit()
 
 void result::Update()
 {	
-	Manager::ChangeScene<result>();//タイトル画面に遷移
+	//なぜかエンターキーに設定するとリザルト-＞タイトル-＞ゲームのタイトルを飛ばしていくので仮でF6に設定
+	if(Input::GetKeyTrigger(VK_F6))
+	{
+		Manager::ChangeScene<Title>();
+	}
 }
 
 void result::Draw()
