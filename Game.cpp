@@ -19,6 +19,7 @@
 #include "title.h"
 #include "result.h"
 #include "Score.h"
+#include "bgmPlayer.h"
 #include <list>
 
 
@@ -32,8 +33,9 @@ void Game::Init()
 	Manager::AddGameObject<Tree>()->SetPosition({ -10.0f, 0.0f, 10.0f });
 	Manager::AddGameObject<Particle>()->SetPosition({ -2.0f, 1.0f, 2.0f });
 	Manager::AddGameObject<Score>()->Init();
+	Manager::AddGameObject<BgmPlayer>();
 	//enemy‚ğ10ŒÂ‘‚â‚·
-	for (int i = 0; i < 1; i++)
+	for (int i = 0; i < 2; i++)
 	{
 		Manager::AddGameObject<enemy>()->SetPosition({ -2.0f + i * 2.0f, 0.0f, 1.0f });
 	}

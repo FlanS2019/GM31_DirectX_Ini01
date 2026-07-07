@@ -144,6 +144,7 @@
     <ClCompile Include="title.cpp" />
     <ClCompile Include="tree.cpp" />
     <ClInclude Include="audio.h" />
+    <ClInclude Include="bgmPlayer.h" />
     <ClInclude Include="box.h" />
     <ClInclude Include="bullet.h" />
     <ClInclude Include="camera.h" />

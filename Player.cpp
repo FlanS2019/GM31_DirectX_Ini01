@@ -32,6 +32,7 @@ void Player::Uninit()
 	if (m_VertexLayout) { m_VertexLayout->Release(); m_VertexLayout = nullptr; }
 	if (m_VertexShader) { m_VertexShader->Release(); m_VertexShader = nullptr; }
 	if (m_PixelShader) { m_PixelShader->Release(); m_PixelShader = nullptr; }
+	if (m_JumpSE) { m_JumpSE->Uninit(); }
 }
 void Player::Update()
 {
