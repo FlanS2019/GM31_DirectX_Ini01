@@ -17,6 +17,7 @@
 #include "particle.h"
 #include "Game.h"
 #include "title.h"
+#include "result.h"
 #include "Score.h"
 #include <list>
 
@@ -31,8 +32,8 @@ void Game::Init()
 	Manager::AddGameObject<Tree>()->SetPosition({ -10.0f, 0.0f, 10.0f });
 	Manager::AddGameObject<Particle>()->SetPosition({ -2.0f, 1.0f, 2.0f });
 	Manager::AddGameObject<Score>()->Init();
-	//木を10個増やす
-	for (int i = 0; i < 10; i++)
+	//enemyを10個増やす
+	for (int i = 0; i < 1; i++)
 	{
 		Manager::AddGameObject<enemy>()->SetPosition({ -2.0f + i * 2.0f, 0.0f, 1.0f });
 	}
@@ -57,7 +58,7 @@ void Game::Update()
 	auto enemies = Manager::GetGameObjects<enemy>();
 	if(enemies.size() == 0)
 	{
-		Manager::ChangeScene<Title>(2.0f);
+		Manager::ChangeScene<result>(2.0f);//敵が全滅したら結果画面に遷移
 	}
 	// パーティクル停止
 	if (Input::GetKeyPress(VK_F2))
