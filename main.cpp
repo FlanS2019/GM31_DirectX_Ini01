@@ -1,5 +1,6 @@
 #include "main.h"
 #include "manager.h"
+#include "audio.h"
 #include <thread>
 
 const wchar_t* CLASS_NAME = L"AppClass";
@@ -43,6 +44,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmd
 
 	CoInitializeEx(nullptr, COINITBASE_MULTITHREADED);
 
+	Audio::InitMaster();
 
 	Manager::Init();
 	
@@ -95,6 +97,8 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmd
 	UnregisterClassW(CLASS_NAME, wcex.hInstance);
 
 	Manager::Uninit();
+	
+	Audio::UninitMaster();
 
 	CoUninitialize();
 

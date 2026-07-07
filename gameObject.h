@@ -22,6 +22,8 @@ protected: // サブクラスが扱えるように protected
 
 	std::list<Component*> m_Components;
 
+	GameObject* m_Parent = nullptr;
+
 	bool m_Active = true;
 
 public:

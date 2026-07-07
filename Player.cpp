@@ -10,6 +10,7 @@
 #include <algorithm>
 #include "tree.h"
 #include "box.h"
+#include "audio.h"
 
 void Player::Init()
 {
@@ -23,6 +24,8 @@ void Player::Init()
 	Renderer::CreateVertexShader(&m_VertexShader, &m_VertexLayout, "shader\\unlitTextureVS.cso");
 	Renderer::CreatePixelShader(&m_PixelShader, "shader\\unlitTexturePS.cso");
 
+	m_JumpSE = AddComponent<Audio>();
+	m_JumpSE->Load("audio\\wan.mp3");
 }
 void Player::Uninit()
 {
@@ -86,6 +89,8 @@ void Player::Update()
 			m_Scale.x = 1.0f;
 			m_Scale.y = 1.0f;
 			m_Scale.z = 1.0f;
+			m_JumpSE->Play(); // © ƒWƒƒƒ“ƒv‰¹Ä¶
+
 		}
 
 		if(!oldGround && m_Grounded)
