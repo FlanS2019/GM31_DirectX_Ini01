@@ -141,6 +141,7 @@
     <ClCompile Include="result.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Score.cpp" />
+    <ClCompile Include="shadow.cpp" />
     <ClCompile Include="title.cpp" />
     <ClCompile Include="tree.cpp" />
     <ClInclude Include="audio.h" />
@@ -173,6 +174,7 @@
     <ClInclude Include="result.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Score.h" />
+    <ClInclude Include="shadow.h" />
     <ClInclude Include="title.h" />
     <ClInclude Include="transform.h" />
     <ClInclude Include="tree.h" />

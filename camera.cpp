@@ -21,25 +21,29 @@ void Camera::Update()
 {
 	Player* player = Manager::GetGameObject<Player>();
 	Vector3 playerPos = player->GetPosition();
-
-	float dt = 1.0f / 60.0f;
-
-	if (Input::GetKeyPress(VK_RIGHT))
-		m_Rotation.y -= 2.0f * dt;
-	else if (Input::GetKeyPress(VK_LEFT))
-		m_Rotation.y += 2.0f * dt;
+	float playerYaw = player->GetRotation().y; // プレイヤーの向き（Yaw）を取得
 
 	float t = 0.1f;
+	m_Target = m_Target * (1.0f - t) + (playerPos + Vector3(0.0f, 2.0f, 0.0f)) * t;
 
-	m_Target = m_Target * (1.0f - t)
-		+ (playerPos + Vector3(0.0f, 2.0f, 0.0f)) * t;
+	const float tXZ = 0.1f;  // 水平方向の追従速度
+	const float tY = 0.04f; // 垂直方向はより緩やかに（ジャンプの影響を抑える）
 
-	m_Position = m_Target
+	m_Target.x = m_Target.x * (1.0f - tXZ) + m_Target.x * tXZ;
+	m_Target.z = m_Target.z * (1.0f - tXZ) + m_Target.z * tXZ;
+	m_Target.y = m_Target.y * (1.0f - tY) + m_Target.y * tY;
+	// プレイヤーの背後にカメラを配置（プレイヤーの向きに応じて回り込む）
+	const float distance = 8.0f;  // プレイヤーとの水平距離
+	const float height = 4.0f;    // プレイヤーの上に何m上げるか
+
+	Vector3 desiredPosition = playerPos
 		+ Vector3(
-			sinf(m_Rotation.y) * 15.0f,
-			8.0f,
-			-cosf(m_Rotation.y) * 15.0f
+			-sinf(playerYaw) * distance,
+			height,
+			-cosf(playerYaw) * distance
 		);
+
+	m_Position = m_Position * (1.0f - t) + desiredPosition * t;
 }
 
 void Camera::Draw()

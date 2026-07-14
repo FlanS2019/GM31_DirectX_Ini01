@@ -16,6 +16,7 @@ public:
 	void Uninit()override;
 	void Update()override;
 	void Draw()override;
+	Vector3 GetTarget() const { return m_Target; }
     //float GetYaw() const { return m_Yaw; }
 	XMMATRIX GetViewMatrix() {
 		return m_ViewMatrix;

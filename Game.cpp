@@ -20,6 +20,7 @@
 #include "result.h"
 #include "Score.h"
 #include "bgmPlayer.h"
+#include "shadow.h"
 #include <list>
 
 
@@ -32,17 +33,19 @@ void Game::Init()
 	Manager::AddGameObject<Player>();
 	Manager::AddGameObject<Tree>()->SetPosition({ -10.0f, 0.0f, 10.0f });
 	Manager::AddGameObject<Particle>()->SetPosition({ -2.0f, 1.0f, 2.0f });
+	//Manager::AddGameObject<Shadow>();
 	Manager::AddGameObject<Score>()->Init();
 	Manager::AddGameObject<BgmPlayer>();
+
 	//enemyÇ10å¬ëùÇ‚Ç∑
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < 1; i++)
 	{
-		Manager::AddGameObject<enemy>()->SetPosition({ -2.0f + i * 2.0f, 0.0f, 1.0f });
+		Manager::AddGameObject<enemy>()->SetPosition({ -2.0f + i * 12.0f, 0.0f, 7.0f });
 	}
 
-	Box* box = Manager::AddGameObject<Box>();
-	box->SetPosition({ 2.0f, 0.0f, 5.0f });
-	box->SetScale({ 2.0f, 2.0f, 2.0f });
+	//Box* box = Manager::AddGameObject<Box>();
+	//box->SetPosition({ 2.0f, 0.0f, 5.0f });
+	//box->SetScale({ 2.0f, 2.0f, 2.0f });
 
 
 	//Manager::AddGameObject<Polygon2D>()->Init(0.0f, 0.0f, 200.0f, 200.0f,L"texture\\jimen.jpg");

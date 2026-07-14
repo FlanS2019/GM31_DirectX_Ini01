@@ -1,5 +1,7 @@
 #pragma once
 #include "gameObject.h"
+class Shadow;
+
 class Player : public GameObject
 {
 private:
@@ -13,6 +15,7 @@ private:
 	// コンポーネント参照（Init で AddComponent して保持）
 	class Transform* m_Transform = nullptr;
 	class Audio* m_JumpSE = nullptr; // ジャンプ音
+	class Shadow* m_Shadow = nullptr; // シャドウオブジェクトへの参照
 public:
 	void Init()override;
 	void Uninit()override;
